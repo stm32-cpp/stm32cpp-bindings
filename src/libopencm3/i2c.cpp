@@ -12,6 +12,12 @@ namespace stm32cpp {
         m_port = I2C2;
         break;
 
+#ifdef I2C3
+      case 3:
+        m_port = I2C3;
+        break;
+#endif
+
       default:
         m_port = I2C1;
     }
@@ -31,8 +37,8 @@ namespace stm32cpp {
         sda_pin = Pin::I2C1_SDA;
     }
 
-    GPIO(scl_pin, OutputMode::AF_OpenDrain, OutputSpeed::Speed2mhz);
-    GPIO(sda_pin, OutputMode::AF_OpenDrain, OutputSpeed::Speed2mhz);
+    GPIO(scl_pin, AFMode::I2C, OutputMode::OpenDrain, PullMode::NoPull, OutputSpeed::Speed2mhz);
+    GPIO(sda_pin, AFMode::I2C, OutputMode::OpenDrain, PullMode::NoPull, OutputSpeed::Speed2mhz);
   }
 
   void I2C::enable() {
