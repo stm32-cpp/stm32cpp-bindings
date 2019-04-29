@@ -66,7 +66,7 @@ namespace stm32cpp {
     i2c_set_trise(m_port, trise);
   }
 
-  void I2C::setAck(bool enabled) {
+  void I2C::setAck(bool enabled) const {
     if (enabled) {
       i2c_enable_ack(m_port);
     }
@@ -92,44 +92,44 @@ namespace stm32cpp {
     i2c_transfer7(m_port, addr, w, wn, r, rn);
   }
 
-  void I2C::sendStartAck() {
+  void I2C::sendStartAck() const {
     i2c_send_start(m_port);
-    while ((I2C_SR1(m_port) & I2C_SR1_SB) == 0);
+    while ((I2C_SR1(m_port) & I2C_SR1_SB) == 0u);
   }
 
-  void I2C::sendStop() {
+  void I2C::sendStop() const {
     i2c_send_stop(m_port);
   }
 
-  void I2C::sendStartRead(uint8_t address) {
+  void I2C::sendStartRead(uint8_t address) const {
     sendStartAck();
 
     i2c_send_7bit_address(m_port, address, I2C_READ);
     while ((I2C_SR1(m_port) & I2C_SR1_ADDR) == 0);
   }
 
-  void I2C::sendStartWrite(uint8_t address) {
+  void I2C::sendStartWrite(uint8_t address) const {
     sendStartAck();
 
     i2c_send_7bit_address(m_port, address, I2C_WRITE);
     while ((I2C_SR1(m_port) & I2C_SR1_ADDR) == 0);
   }
 
-  void I2C::sendByte(uint8_t byte) {
+  void I2C::sendByte(uint8_t byte) const {
     i2c_send_data(m_port, byte);
     while ((I2C_SR1(m_port) & I2C_SR1_TxE) == 0);
   }
 
-  bool I2C::isBusy() {
+  bool I2C::isBusy() const {
     return (I2C_SR2(m_port) & I2C_SR2_BUSY) != 0;
   }
 
-  uint8_t I2C::readByte() {
+  uint8_t I2C::readByte() const {
     while ((I2C_SR1(m_port) & I2C_SR1_RxNE) == 0);
     return i2c_get_data(m_port);
   }
 
-  bool I2C::isMaster() {
+  bool I2C::isMaster() const {
     return (I2C_SR2(m_port) & I2C_SR2_MSL) != 0;
   }
 
